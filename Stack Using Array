@@ -1,0 +1,98 @@
+#include<iostream>
+using namespace std;
+
+class Stack
+{
+private:
+    int stack_size;
+    int array_capacity;
+    int* array;
+
+public:
+    Stack(int n = 10)
+    {
+        stack_size = 0;
+        array_capacity = n;
+        array = new int[array_capacity];
+    }
+
+    bool empty()
+    {
+        return (stack_size == 0);
+    }
+
+    ~Stack()
+    {
+        delete[] array;
+    }
+
+    int top()
+    {
+        if (empty())
+        {
+            cout << "\n Stack is empty";
+            return -1;
+        }
+        return array[stack_size - 1];
+    }
+
+    int pop()
+    {
+        if (empty())
+        {
+            cout << "\n Stack is empty";
+            return -1;
+        }
+        cout << "\n Element " << array[stack_size - 1] << " is deleted from the stack";
+        stack_size--; // decrease stack size as autually it can't be removed
+        return 0;
+    }
+    void double_size()
+    {
+        int* narray = new int[array_capacity * 2];
+        for (int i = 0; i < array_capacity; i++)
+        {
+            narray[i] = array[i];
+        }
+        delete[] array;
+        array = narray;
+        array_capacity = array_capacity * 2;
+        cout << "\n Stack size incresed";
+        cout << " \n Array Capacity after increasing size : " << array_capacity;
+    }
+    int push(int e)
+    {
+        if (stack_size == array_capacity)
+        {
+            double_size();
+        }
+        array[stack_size] = e; // adding element at the top of the stack
+        stack_size++;
+        cout << "\n Element " << e << " is added to stack!";
+        return 0;
+    }
+};
+
+int main()
+{
+    Stack s1;
+
+    s1.push(10);
+    s1.push(20);
+    s1.push(30);
+    s1.push(40);
+    s1.push(50);
+    s1.push(60);
+    s1.push(70);
+    s1.push(80);
+    s1.push(90);
+    s1.push(100);
+    s1.push(30);
+    int e = s1.top();
+    cout << "\n Element at the top is: " << e;
+    s1.pop();
+    int f = s1.top();
+    cout << "\n Element at the top after pop is: " << f;
+    return 0;
+}
+
