@@ -174,7 +174,7 @@ friend class Stack;
 class Stack
 {
 private:
-Doubly_linked st;
+List st;
 public:
 void push(int n)
 {
