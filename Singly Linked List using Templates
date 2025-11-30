@@ -1,0 +1,220 @@
+#include <iostream>
+using namespace std;
+
+template <typename T>
+class Node
+{
+private:
+    T element;
+    Node<T>* nextptr;
+
+public:
+    Node(T i = 0, Node<T>* pt = nullptr)
+    {
+        element = i;
+        nextptr = pt;
+    }
+
+    T retrieve() const
+    {
+        return element;
+    }
+
+    template<typename U>
+    friend class List;
+};
+
+template <typename T>
+class List
+{
+private:
+    Node<T>* head_list = nullptr;
+
+public:
+
+    bool empty() const
+    {
+        return head_list == nullptr;
+    }
+
+    void push_front(T n)
+    {
+        head_list = new Node<T>(n, head_list);
+    }
+
+    void pop_front()
+    {
+        if (empty())
+        {
+            cout << "\nList is empty";
+            return;
+        }
+
+        Node<T>* temp = head_list;
+        T value = temp->element;
+
+        head_list = head_list->nextptr;
+        delete temp;
+
+        cout << "\nElement " << value << " deleted from front.";
+    }
+
+    void push_end(T n)
+    {
+        Node<T>* newNode = new Node<T>(n);
+
+        if (empty())
+        {
+            head_list = newNode;
+            return;
+        }
+
+        Node<T>* ptr = head_list;
+        while (ptr->nextptr != nullptr)
+        {
+            ptr = ptr->nextptr;
+        }
+        ptr->nextptr = newNode;
+    }
+
+    void pop_end()
+    {
+        if (empty())
+        {
+            cout << "\nList is empty";
+            return;
+        }
+
+        if (head_list->nextptr == nullptr)
+        {
+            cout << "\nOnly one node. Deleting: " << head_list->element;
+            delete head_list;
+            head_list = nullptr;
+            return;
+        }
+
+        Node<T>* ptr = head_list;
+        while (ptr->nextptr->nextptr != nullptr)
+        {
+            ptr = ptr->nextptr;
+        }
+
+        cout << "\nDeleting last element: " << ptr->nextptr->element;
+        delete ptr->nextptr;
+        ptr->nextptr = nullptr;
+    }
+
+    void display() const
+    {
+        cout << "\nElements in the list:\n";
+        for (Node<T>* ptr = head_list; ptr != nullptr; ptr = ptr->nextptr)
+        {
+            cout << ptr->element << "   ";
+        }
+        cout << endl;
+    }
+
+    T front() const
+    {
+        if (empty())
+        {
+            cout << "List is empty";
+            throw "underflow";
+        }
+
+        return head_list->element;
+    }
+
+    void size()
+    {
+        int count = 0;
+        for (Node<T>* ptr = head_list; ptr != nullptr; ptr = ptr->nextptr)
+        {
+            count++;
+        }
+        cout << "\nTotal elements in list: " << count;
+    }
+
+    void count(T i)
+    {
+        int c = 0;
+        for (Node<T>* ptr = head_list; ptr != nullptr; ptr = ptr->nextptr)
+        {
+            if (ptr->element == i)
+                c++;
+        }
+        cout << "\nThe number " << i << " appears " << c << " times in the list";
+    }
+
+    void erase(T x)
+    {
+        if (empty()) return;
+
+        while (head_list != nullptr && head_list->element == x)
+        {
+            Node<T>* temp = head_list;
+            head_list = head_list->nextptr;
+            delete temp;
+        }
+
+        Node<T>* ptr = head_list;
+        while (ptr != nullptr && ptr->nextptr != nullptr)
+        {
+            if (ptr->nextptr->element == x)
+            {
+                Node<T>* temp = ptr->nextptr;
+                ptr->nextptr = temp->nextptr;
+                delete temp;
+            }
+            else
+            {
+                ptr = ptr->nextptr;
+            }
+        }
+
+        cout << "\nAll occurrences of " << x << " deleted.";
+    }
+};
+
+int main()
+{
+    List<float> li;
+    li.push_front(90.0);
+    li.push_front(80.3);
+    li.push_front(3.5);
+    li.push_front(60.7);
+    li.push_front(50.9);
+    li.display();
+
+    cout << "\nAfter adding at end:";
+    li.push_end(40.0);
+    li.push_end(40.0);
+    li.push_end(30.8);
+    li.push_end(30.8);
+    li.push_end(30.8);
+    li.push_end(30.8);
+    li.display();
+
+    cout << "\nAfter pop_end:";
+    li.pop_end();
+    li.display();
+
+    cout << "\nAfter pop_front:";
+    try {
+        li.pop_front();
+    }
+    catch (const char msg)
+    {
+        cout << "\n Exception:  " << msg;
+    }
+    li.display();
+
+    li.size();
+    cout << endl;
+    li.erase(30.8);
+    li.display();
+    cout << endl;
+    cout << "\nFront element: " << li.front();
+
+    return 0;
+}
