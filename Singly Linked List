@@ -40,7 +40,7 @@ public:
         if (empty())
         {
             cout << "\nList is empty";
-            return;
+            throw "Underflow";
         }
 
         Node* temp = head_list;
@@ -192,7 +192,13 @@ int main()
     li.display();
 
     cout << "\nAfter pop_front:";
-    li.pop_front();
+    try {
+        li.pop_front();
+    }
+    catch (const char msg)
+    {
+        cout << "\n Exception:  " << msg;
+    }
     li.display();
 
     li.size();
