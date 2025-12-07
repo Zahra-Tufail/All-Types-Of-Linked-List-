@@ -1,0 +1,51 @@
+template <class T>
+class BinaryTree {
+private:
+    T element;
+    BinaryTree* parent_node;
+    BinaryTree* left;
+    BinaryTree* right;
+
+public:
+    BinaryTree(T obj, BinaryTree* p = nullptr)
+    {
+        element = obj;
+        parent_node = p;
+        left = nullptr;
+        right = nullptr;
+    }
+
+    T retrieve() const {
+        return element;
+    }
+
+    BinaryTree* parent() {
+        return parent_node;
+    }
+
+    BinaryTree* left_child() {
+        return left;
+    }
+
+    BinaryTree* right_child() {
+        return right;
+    }
+
+    bool is_root() {
+        return parent_node == nullptr;
+    }
+
+    bool is_leaf() {
+        return left == nullptr && right == nullptr;
+    }
+
+
+    int size() {
+        int s = 1;
+        if (left) s += left->size();
+        if (right) s += right->size();
+        return s;
+    }
+
+    
+};
