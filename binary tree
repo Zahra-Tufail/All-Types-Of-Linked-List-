@@ -36,16 +36,38 @@ public:
     }
 
     bool is_leaf() {
-        return left == nullptr && right == nullptr;
+        return (left_child() == nullptr && right_child() == nullptr);
     }
 
-
-    int size() {
-        int s = 1;
-        if (left) s += left->size();
-        if (right) s += right->size();
-        return s;
+    int size() 
+    {
+        return 1 + (left() == nullptr) ? 0 : left()->size() 
+                 + (right() == nullptr) ? 0 : right()->size();
     }
 
-    
+    int height()
+    {
+        if (is_leaf())
+        {
+            return 0;
+        }
+        else
+        {
+       
+            return 1 + std::max((left() == nullptr) ? 0 : left()->size() + (right() == nullptr) ? 0 : right()->size());
+        }
+    }
+
+    void clear()
+    {
+        if (left_child() != nullptr)
+        {
+            left_child()->clear(left)
+        }
+        if (right_child() != nullptr)
+        {
+            right_child()->clear(right)
+        }
+        delete this;
+    }   
 };
