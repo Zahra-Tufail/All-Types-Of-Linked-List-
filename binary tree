@@ -1,73 +1,126 @@
-template <class T>
-class BinaryTree {
-private:
-    T element;
-    BinaryTree* parent_node;
-    BinaryTree* left;
-    BinaryTree* right;
-
+#include<iostream>
+using namespace std;
+template <class t>
+class binary_node
+{
+protected:
+	t element;
+	binary_node* left_tree;
+	binary_node* right_tree;
 public:
-    BinaryTree(T obj, BinaryTree* p = nullptr)
+    binary_node(T obj)
     {
         element = obj;
-        parent_node = p;
-        left = nullptr;
-        right = nullptr;
+        left_tree = nullptr;
+        right_tree = nullptr;
     }
 
-    T retrieve() const {
+    T retrieve() const 
+    {
         return element;
     }
-
-    BinaryTree* parent() {
-        return parent_node;
-    }
-
-    BinaryTree* left_child() {
-        return left;
-    }
-
-    BinaryTree* right_child() {
-        return right;
-    }
-
-    bool is_root() {
-        return parent_node == nullptr;
-    }
-
-    bool is_leaf() {
-        return (left_child() == nullptr && right_child() == nullptr);
-    }
-
-    int size() 
+    
+    binary_node* left()
     {
-        return 1 + (left() == nullptr) ? 0 : left()->size() 
-                 + (right() == nullptr) ? 0 : right()->size();
+        return left_tree;
+    }
+
+    binary_node* right()
+    {
+        return right_tree;
+    }
+
+    bool is_leaf()
+    {
+        return (empty()! && left()->empty() && right()->empty());
+    }
+
+    bool empty()
+    {
+        return (this==nullptr)
+    }
+
+    int size()
+    {
+        return empty() ? 0 : 1 + left()->size() + right()->size();
     }
 
     int height()
     {
-        if (is_leaf())
+        return empty() ? -1 : 1 + std::max(left()->height() , right()->height());
+    }
+
+    void clear(binary_node* to_this)
+    {
+        if (empty())
         {
-            return 0;
+            return;
         }
-        else
+        left()->clear(left_tree);
+        right()->clear(right_tree);
+        delete this;
+        to_this = nullptr; // for making the pointer null that was pointing to the tree that is to be deleted  
+    }
+};
+template <class t>
+class Binary_Tree
+{
+private:
+    binary_node<t>* root_node;
+public:
+    Binary_Tree()
+    {
+        root_node=nullptr;
+    }
+
+    binary_node* root()
+    {
+        return root_node;
+    }
+
+    bool empty()
+    {
+        return (root_node == nullptr);
+    }
+
+    int size_b()
+    {
+        return (empty()) ? 0 : root->size_b();
+    }
+
+    int height_b()
+    {
+        return (empty()) ? -1 : root->height_b();
+    }
+
+    //traversals
+    void inorder(binary_node* r) //left(1) root(+) right(2) -> (1 + 2)
+    {
+        if (r!=nullptr)
         {
-       
-            return 1 + std::max((left() == nullptr) ? 0 : left()->size() + (right() == nullptr) ? 0 : right()->size());
+            inorder(r->left());
+            cout << "\n Root node :" << r->retrieve();
+            inorder(r->right());
         }
     }
 
-    void clear()
+    void postorder(binary_node* r) //left(1) right(2)  root(+)  -->  12+
     {
-        if (left_child() != nullptr)
+        if (r != nullptr)
         {
-            left_child()->clear(left)
+            postorder(r->left());
+            postorder(r->right());
+            cout << "\n Root node :" << r->retrieve();
         }
-        if (right_child() != nullptr)
+    }
+
+    void preoder(binary_node* r) //root(+) left(1) right(2) --> +12
+    {
+        if (r != nullptr)
         {
-            right_child()->clear(right)
+            cout << "\n Root node :" << r->retrieve();
+            postorder(r->left());
+            postorder(r->right());
         }
-        delete this;
-    }   
+    }
 };
